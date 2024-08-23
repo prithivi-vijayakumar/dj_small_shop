@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from django.utils.html import format_html
-from backend.models import CustomUser, Category, Brand
+from backend.models import CustomUser, Category, Brand, Product
 
 from django.contrib.auth.admin import UserAdmin
 from backend.forms import CustomerUserCreationForm,CustomerUserChangeForm
@@ -49,3 +49,14 @@ class BrandAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Brand, BrandAdmin)
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('category','brand','price','qty','name','image_tag',)
+
+    def image_tag(self, obj):
+        return format_html('<img src = "{}" width = "150" height="150" />'.format(obj.image_path.url))
+
+    image_tag.short_description = 'Image'
+
+
+admin.site.register(Product,ProductAdmin)
