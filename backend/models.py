@@ -109,4 +109,5 @@ class Cart(models.Model):
         total = sum (element.total_price()for element in cart_items)
 
     class Meta:
-        db_table = 'cart' 
+        db_table = 'cart'
+

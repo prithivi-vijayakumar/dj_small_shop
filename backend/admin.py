@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from django.utils.html import format_html
-from backend.models import CustomUser, Category, Brand, Product
+from backend.models import CustomUser, Category, Brand, Product, Cart
 
 from django.contrib.auth.admin import UserAdmin
 from backend.forms import CustomerUserCreationForm,CustomerUserChangeForm
@@ -60,3 +60,9 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Product,ProductAdmin)
+
+class CartAdmin(admin.ModelAdmin):
+    list_display = ('id', 'custom_user', 'Product', 'qty',)
+
+
+admin.site.register(Cart, CartAdmin)
