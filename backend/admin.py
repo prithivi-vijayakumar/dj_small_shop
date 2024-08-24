@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from django.utils.html import format_html
-from backend.models import CustomUser, Category, Brand, Product, Cart
+from backend.models import CustomUser, Category, Brand, Product, Cart, Order, OrderItem
 
 from django.contrib.auth.admin import UserAdmin
 from backend.forms import CustomerUserCreationForm,CustomerUserChangeForm
@@ -66,3 +66,16 @@ class CartAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Cart, CartAdmin)
+
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    extra = 1
+
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = (
+    'id', 'custom_user', 'order_number', 'order_date', 'total_amount', 'order_status', 'payment_method',)
+    inlines = [OrderItemInline]
+
+
+admin.site.register(Order, OrderAdmin)
