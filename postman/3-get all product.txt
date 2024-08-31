@@ -1,0 +1,16 @@
+GET ->  http://127.0.0.1:8000/api_v2/products
+
+response
+
+[
+    {
+        "id": 1,
+        "name": "pencil",
+        "price": "100.00",
+        "qty": 3,
+        "alert_stock": 10,
+        "image_path": "http://127.0.0.1:8000/media/no-image-available.jpg",
+        "category": 2,
+        "brand": 1
+    }
+]

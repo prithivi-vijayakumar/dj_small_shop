@@ -1,0 +1,17 @@
+GET -> http://127.0.0.1:8000/api_v2/order
+
+response
+
+{
+    "data": [
+        {
+            "id": 2,
+            "order_number": "1",
+            "order_date": "2024-08-27T13:33:48.545025Z",
+            "total_amount": "100.00",
+            "order_status": "PENDING",
+            "payment_method": "CASH",
+            "custom_user": 1
+        }
+    ]
+}

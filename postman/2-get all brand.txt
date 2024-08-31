@@ -1,0 +1,14 @@
+
+GET -> http://127.0.0.1:8000/api_v2/brands
+
+response
+
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "camlin",
+            "image_path": "http://127.0.0.1:8000/media/no-image-available.jpg"
+        }
+    ]
+}
