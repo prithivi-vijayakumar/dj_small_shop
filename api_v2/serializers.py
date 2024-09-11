@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from backend.models import Category, Brand, Product, Order, Cart, CustomUser
+from backend.models import Category, Brand, Product, Order, Cart, CustomUser, OrderItem
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -18,10 +18,46 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ['product', 'qty', 'unit_price', 'amount', 'discount']
+
+
 class OrderSerializer(serializers.ModelSerializer):
+    order_items = OrderItemSerializer(many=True)
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ['id', 'customer', 'total_amount', 'order_status', 'payment_method', 'order_items']
+        read_only_fields = ['customer']  # Ensure customer is not required in the request
+
+    def create(self, validated_data):
+        order_items_data = validated_data.pop('order_items')
+        # order = Order.objects.create(**validated_data)
+        user = self.context['request'].user
+        order = Order.objects.create(customer=user, **validated_data)
+        total_amount = 0
+
+        for item_data in order_items_data:
+            # Calculate the amount here
+            amount = item_data['qty'] * item_data['unit_price']
+            total_amount += amount
+
+            # Create OrderItem without passing amount directly
+            OrderItem.objects.create(
+                order=order,
+                product=item_data['product'],
+                qty=item_data['qty'],
+                unit_price=item_data['unit_price'],
+                amount=item_data['amount'],
+                discount=item_data['discount']
+            )
+
+        # Update total_amount for the order
+        order.total_amount = total_amount
+        order.save()
+        return order
+fields = '__all__'
 
 class CartSerializer(serializers.ModelSerializer):
             customer_name = serializers.SerializerMethodField()
@@ -81,3 +117,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
         user.is_active = True
         user.save()
         return user
+
+
+
